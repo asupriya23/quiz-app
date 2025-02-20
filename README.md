@@ -1,12 +1,10 @@
 ﻿# Quiz Platform
 
-<hr>
 
 ## Objective
 
 Develop a **quiz platform** where users can attempt quizzes, get instant feedback, and track their progress
 
-<hr>
 
 ## Directory Structure
 
@@ -31,7 +29,6 @@ quiz-app/
 │── .gitignore
 ```
 
-<hr>
 
 ## Installation & Setup
 
@@ -50,13 +47,11 @@ quiz-app/
 
 The app will run on http://localhost:3000.
 
-<hr>
 
 ## Demo
 
 https://drive.google.com/file/d/1pQLeJYvIgPEltlgL5831z2TDcrUPJrx0/view?usp=sharing
 
-<hr>
 
 ## Tech Stack
 
@@ -64,7 +59,6 @@ https://drive.google.com/file/d/1pQLeJYvIgPEltlgL5831z2TDcrUPJrx0/view?usp=shari
 - **Database**: IndexedDB (for storing attempt history)
 - **Deployment**: Vercel / Netlify
 
-<hr>
 
 ## Features
 
@@ -87,7 +81,6 @@ https://drive.google.com/file/d/1pQLeJYvIgPEltlgL5831z2TDcrUPJrx0/view?usp=shari
 
 - Saves quiz history using IndexedDB for offline storage.
 
-<hr>
 
 ## File Explanations
 
