@@ -15,23 +15,22 @@ const Quiz = ({ onQuizComplete }) => {
       const countdown = setTimeout(() => setTimer(timer - 1), 1000);
       return () => clearTimeout(countdown);
     } else {
-      handleSkip(); 
+      handleSkip();
     }
   }, [timer]);
 
+  const normalizeNumber = (num) => {
+    return num.replace(/^0+/, "") || "0"; 
+  };
+
   const handleAnswerClick = (answer) => {
-    setSelectedAnswer(answer);
-    const correctAnswer = questions[currentQuestion].correctAnswer;
-    const isCorrect = answer.trim().toLowerCase() === correctAnswer.trim().toLowerCase();
+    const correctAnswer = normalizeNumber(questions[currentQuestion].correctAnswer.toString());
+    const userAnswer = normalizeNumber(answer.toString());
+
+    const isCorrect = userAnswer === correctAnswer;
     setFeedback(isCorrect ? "✅ Correct!" : `❌ Incorrect! The correct answer is: ${correctAnswer}`);
 
-    const newAttempt = {
-      question: questions[currentQuestion].question,
-      answer,
-      isCorrect,
-    };
-
-    setAttemptHistory([...attemptHistory, newAttempt]);
+    setAttemptHistory([...attemptHistory, { question: questions[currentQuestion].question, answer, isCorrect }]);
     if (isCorrect) setScore(score + 1);
   };
 
@@ -86,7 +85,7 @@ const Quiz = ({ onQuizComplete }) => {
             value={selectedAnswer}
             onChange={(e) => {
               const value = e.target.value;
-              if (/^\d*$/.test(value)) { 
+              if (/^\d*$/.test(value)) {
                 setSelectedAnswer(value);
               }
             }}
