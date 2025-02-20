@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 const Quiz = ({ onQuizComplete }) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState("");
+  const [selectedAnswer, setSelectedAnswer] = useState(null); 
   const [score, setScore] = useState(0);
   const [attemptHistory, setAttemptHistory] = useState([]);
   const [timer, setTimer] = useState(30);
@@ -31,21 +31,28 @@ const Quiz = ({ onQuizComplete }) => {
     setFeedback(isCorrect ? "✅ Correct!" : `❌ Incorrect! The correct answer is: ${correctAnswer}`);
 
     setAttemptHistory([...attemptHistory, { question: questions[currentQuestion].question, answer, isCorrect }]);
-    if (isCorrect) setScore(score + 1);
+    if (isCorrect) setScore((prevScore) => prevScore + 1); 
+
+    setSelectedAnswer(answer); 
   };
 
   const handleSkip = () => {
-    setFeedback(null);
-    setAttemptHistory([...attemptHistory, { question: questions[currentQuestion].question, answer: "Skipped", isCorrect: false }]);
-    setCurrentQuestion(currentQuestion + 1);
-    setSelectedAnswer("");
-    setTimer(30);
+    setAttemptHistory([
+      ...attemptHistory,
+      { question: questions[currentQuestion].question, answer: "Skipped", isCorrect: false }
+    ]);
+    moveToNextQuestion();
+  };
+  
+  const handleNext = () => {
+    if (feedback === null) return; 
+    moveToNextQuestion();
   };
 
-  const handleNext = () => {
+  const moveToNextQuestion = () => {
     if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
-      setSelectedAnswer("");
+      setCurrentQuestion((prev) => prev + 1);
+      setSelectedAnswer(null);  
       setFeedback(null);
       setTimer(30);
     } else {
@@ -71,7 +78,7 @@ const Quiz = ({ onQuizComplete }) => {
               key={index}
               className={`btn ${selectedAnswer === option ? "btn-primary" : "btn-outline-primary"} mt-2`}
               onClick={() => handleAnswerClick(option)}
-              disabled={selectedAnswer !== ""}
+              disabled={selectedAnswer !== null}
               style={{ width: "100%", padding: "10px", fontSize: "1.1rem", marginBottom: "10px" }}
             >
               {option}
@@ -79,10 +86,10 @@ const Quiz = ({ onQuizComplete }) => {
           ))
         ) : (
           <input
-            type="number"
+            type="text"
             className="form-control mt-2"
             placeholder="Enter your answer"
-            value={selectedAnswer}
+            value={selectedAnswer || ""}
             onChange={(e) => {
               const value = e.target.value;
               if (/^\d*$/.test(value)) {
@@ -106,7 +113,7 @@ const Quiz = ({ onQuizComplete }) => {
         <button
           className="btn btn-success px-4 py-2 mx-3"
           onClick={handleNext}
-          disabled={!selectedAnswer && timer > 0}
+          disabled={feedback === null} 
           style={{ fontSize: "1.1rem", marginRight: "10px" }}
         >
           {currentQuestion === questions.length - 1 ? "🎉 Finish Quiz" : "➡ Next Question"}
@@ -116,7 +123,7 @@ const Quiz = ({ onQuizComplete }) => {
           <button
             className="btn btn-warning px-4 py-2 mx-3"
             onClick={handleSkip}
-            disabled={selectedAnswer !== ""}
+            disabled={selectedAnswer !== null}
             style={{ fontSize: "1.1rem" }}
           >
             ⏭ Skip Question

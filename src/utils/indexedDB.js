@@ -54,4 +54,20 @@ const openDB = () => {
       console.error("IndexedDB error:", error);
     }
   };
+  export const clearQuizHistory = async () => {
+    try {
+      const db = await openDB();
+      const transaction = db.transaction("quizResults", "readwrite");
+      const store = transaction.objectStore("quizResults");
+  
+      return new Promise((resolve, reject) => {
+        const request = store.clear();
+        request.onsuccess = () => resolve("Quiz history cleared successfully.");
+        request.onerror = () => reject("Error clearing quiz history.");
+      });
+    } catch (error) {
+      console.error("IndexedDB error:", error);
+      throw error;
+    }
+  };
   
