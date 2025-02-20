@@ -15,7 +15,7 @@ const Quiz = ({ onQuizComplete }) => {
       const countdown = setTimeout(() => setTimer(timer - 1), 1000);
       return () => clearTimeout(countdown);
     } else {
-      handleNext();
+      handleSkip(); 
     }
   }, [timer]);
 
@@ -30,6 +30,7 @@ const Quiz = ({ onQuizComplete }) => {
       answer,
       isCorrect,
     };
+
     setAttemptHistory([...attemptHistory, newAttempt]);
     if (isCorrect) setScore(score + 1);
   };
@@ -43,10 +44,10 @@ const Quiz = ({ onQuizComplete }) => {
   };
 
   const handleNext = () => {
-    setFeedback(null);
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
       setSelectedAnswer("");
+      setFeedback(null);
       setTimer(30);
     } else {
       onQuizComplete({ score, total: questions.length, attempts: attemptHistory });
@@ -83,14 +84,14 @@ const Quiz = ({ onQuizComplete }) => {
             className="form-control mt-2"
             placeholder="Enter your answer"
             value={selectedAnswer}
-            onChange={(e) => setSelectedAnswer(e.target.value)}
-            disabled={feedback !== null}
-            onBlur={() => handleAnswerClick(selectedAnswer)}
-            onKeyPress={(e) => {
-              if (!/^\d$/.test(e.key) && e.key !== "Backspace" && e.key !== "Enter") {
-                e.preventDefault();
+            onChange={(e) => {
+              const value = e.target.value;
+              if (/^\d*$/.test(value)) { 
+                setSelectedAnswer(value);
               }
             }}
+            disabled={feedback !== null}
+            onBlur={() => handleAnswerClick(selectedAnswer)}
             style={{ fontSize: "1.1rem", padding: "10px", textAlign: "center" }}
           />
         )}
@@ -104,17 +105,17 @@ const Quiz = ({ onQuizComplete }) => {
 
       <div className="text-center mt-4">
         <button
-          className="btn btn-success px-4 py-2 mx-2"
+          className="btn btn-success px-4 py-2 mx-3"
           onClick={handleNext}
           disabled={!selectedAnswer && timer > 0}
-          style={{ fontSize: "1.1rem" }}
+          style={{ fontSize: "1.1rem", marginRight: "10px" }}
         >
           {currentQuestion === questions.length - 1 ? "🎉 Finish Quiz" : "➡ Next Question"}
         </button>
 
         {currentQuestion < questions.length - 1 && (
           <button
-            className="btn btn-warning px-4 py-2 mx-2"
+            className="btn btn-warning px-4 py-2 mx-3"
             onClick={handleSkip}
             disabled={selectedAnswer !== ""}
             style={{ fontSize: "1.1rem" }}
