@@ -48,9 +48,11 @@ quiz-app/
 The app will run on http://localhost:3000.
 
 
-## Demo
+## Live Preview
 
-https://drive.google.com/file/d/1pQLeJYvIgPEltlgL5831z2TDcrUPJrx0/view?usp=sharing
+- Deployed App : https://quiz-app-anshika.vercel.app/
+
+- Demo Video : https://drive.google.com/file/d/1pQLeJYvIgPEltlgL5831z2TDcrUPJrx0/view?usp=sharing
 
 
 ## Tech Stack
